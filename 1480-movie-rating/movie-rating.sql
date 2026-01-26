@@ -1,14 +1,18 @@
-(SELECT name AS results
-FROM MovieRating JOIN Users USING(user_id)
-GROUP BY name
-ORDER BY COUNT(*) DESC, name
-LIMIT 1)
+(select u.name as results
+from Users u
+join MovieRating mr
+on u.user_id = mr.user_id
+group by u.name
+order by count(*) desc, name
+limit 1)
 
-UNION ALL
+union all
 
-(SELECT title AS results
-FROM MovieRating JOIN Movies USING(movie_id)
-WHERE EXTRACT(YEAR_MONTH FROM created_at) = 202002
-GROUP BY title
-ORDER BY AVG(rating) DESC, title
-LIMIT 1);
+(select title as results
+from Movies m
+join MovieRating mr
+on m.movie_id = mr.movie_id
+where mr.created_at between '2020-02-01' and '2020-02-29'
+group by m.title
+order by avg(mr.rating) desc, title
+limit 1)

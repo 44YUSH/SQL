@@ -1,11 +1,11 @@
-WITH Ranked AS (
-    SELECT
+with Ranked as (
+    select
     student_id,
     subject,
-    FIRST_VALUE(score) OVER(PARTITION BY student_id,subject ORDER BY exam_date) AS first_score,
-    FIRST_VALUE(score) OVER(PARTITION BY student_id,subject ORDER BY exam_date DESC) AS latest_score
-    FROM Scores
+    first_value(score) over(partition by student_id,subject order by exam_date) as first_score,
+    first_value(score) over(partition by student_id,subject order by exam_date desc) as latest_score
+    from Scores
 )
-SELECT DISTINCT * FROM Ranked
-WHERE first_score<latest_score
-ORDER BY student_id,subject
+select distinct * from Ranked
+where first_score<latest_score
+order by student_id,subject
